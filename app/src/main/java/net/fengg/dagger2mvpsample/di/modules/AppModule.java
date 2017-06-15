@@ -1,6 +1,7 @@
-package net.fengg.dagger2mvpsample.modules;
+package net.fengg.dagger2mvpsample.di.modules;
 
 import android.app.Application;
+import android.content.Context;
 
 import net.fengg.dagger2mvpsample.App;
 
@@ -10,7 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by zhangfeng on 2015/8/24.
+ * Created by feng on 2017/6/8.
  */
 @Module
 public class AppModule {

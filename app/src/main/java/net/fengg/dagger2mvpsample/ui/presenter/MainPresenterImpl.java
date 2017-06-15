@@ -1,34 +1,39 @@
 package net.fengg.dagger2mvpsample.ui.presenter;
 
-import net.fengg.dagger2mvpsample.iterators.GetContributorsIterator;
-import net.fengg.dagger2mvpsample.models.Contributor;
-import net.fengg.dagger2mvpsample.ui.listener.OnFinishListener;
-import net.fengg.dagger2mvpsample.ui.view.MainView;
-
-import java.util.List;
+import net.fengg.dagger2mvpsample.data.IMainExecutor;
+import net.fengg.dagger2mvpsample.ui.contract.IMainContract;
+import net.fengg.dagger2mvpsample.ui.listener.OnFinishListenerMain;
 
 /**
  * Created by zhangfeng on 2015/8/24.
  */
-public class MainPresenterImpl implements MainPresenter, OnFinishListener {
+public class MainPresenterImpl implements IMainContract.Presenter, OnFinishListenerMain {
 
-    private MainView view;
-    private GetContributorsIterator iterator;
+    private IMainContract.View view;
+    private IMainExecutor iterator;
 
-    public MainPresenterImpl(MainView view, GetContributorsIterator iterator) {
+    public MainPresenterImpl(IMainContract.View view, IMainExecutor iterator) {
         this.view = view;
         this.iterator = iterator;
     }
 
     @Override
-    public void onFinished(List<Contributor> contributors) {
-        view.hideProgress();
-        view.setText(null == contributors ? "null" : contributors.toString());
+    public void onCompute() {
+         iterator.sum(3, 4, this);
     }
 
     @Override
-    public void onGet() {
-        view.showProgress();
-        iterator.getContributors(this);
+    public void start() {
+        onCompute();
+    }
+
+    @Override
+    public void onSuccess(int sum) {
+        view.setText("3+4=" + sum);
+    }
+
+    @Override
+    public void onError(String error) {
+
     }
 }

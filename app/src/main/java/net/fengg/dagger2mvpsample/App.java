@@ -1,37 +1,35 @@
 package net.fengg.dagger2mvpsample;
 
 import android.app.Application;
-import android.content.Context;
 
-import net.fengg.dagger2mvpsample.component.AppComponent;
-import net.fengg.dagger2mvpsample.component.DaggerAppComponent;
-import net.fengg.dagger2mvpsample.modules.AppModule;
+import com.alibaba.android.arouter.launcher.ARouter;
+
+import net.fengg.dagger2mvpsample.di.component.AppComponent;
+import net.fengg.dagger2mvpsample.di.component.DaggerAppComponent;
+
+import timber.log.Timber;
 
 /**
- * Created by zhangfeng on 2015/8/24.
+ * Created by feng on 2017/6/8.
  */
+
 public class App extends Application {
 
-    private AppComponent component;
+    AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        setGraph();
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+        appComponent = DaggerAppComponent.create();
+        appComponent.inject(this);
+        ARouter.openDebug();
+        ARouter.init(this);
     }
 
-    private void setGraph() {
-        component = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .build();
-        component.inject(this);
-    }
-
-    public AppComponent component() {
-        return component;
-    }
-
-    public static App get(Context context) {
-        return (App) context.getApplicationContext();
+    public AppComponent getAppComponent(){
+        return appComponent;
     }
 }

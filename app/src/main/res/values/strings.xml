@@ -2,5 +2,6 @@
     <string name="app_name">Dagger2MvpSample</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="click">Click</string>
     <string name="action_settings">Settings</string>
 </resources>
