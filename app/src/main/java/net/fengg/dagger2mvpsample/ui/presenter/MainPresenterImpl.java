@@ -1,39 +1,54 @@
 package net.fengg.dagger2mvpsample.ui.presenter;
 
-import net.fengg.dagger2mvpsample.data.IMainExecutor;
+import android.text.TextUtils;
+
+import net.fengg.dagger2mvpsample.ui.interactor.IMainInteractor;
 import net.fengg.dagger2mvpsample.ui.contract.IMainContract;
-import net.fengg.dagger2mvpsample.ui.listener.OnFinishListenerMain;
+import net.fengg.dagger2mvpsample.ui.listener.OnFinishListener;
 
 /**
  * Created by zhangfeng on 2015/8/24.
  */
-public class MainPresenterImpl implements IMainContract.Presenter, OnFinishListenerMain {
+public class MainPresenterImpl implements IMainContract.Presenter {
 
     private IMainContract.View view;
-    private IMainExecutor iterator;
+    private IMainInteractor interactor;
 
-    public MainPresenterImpl(IMainContract.View view, IMainExecutor iterator) {
+    public MainPresenterImpl(IMainContract.View view, IMainInteractor interactor) {
         this.view = view;
-        this.iterator = iterator;
+        this.interactor = interactor;
     }
 
     @Override
-    public void onCompute() {
-         iterator.sum(3, 4, this);
+    public void onCompute(String first, String second) {
+        if(TextUtils.isEmpty(first) || TextUtils.isEmpty(second)) {
+            return;
+        }
+         interactor.sum(Integer.parseInt(first), Integer.parseInt(second), new OnFinishListener<Integer>() {
+             @Override
+             public void onStart() {
+                view.showProgress();
+             }
+
+             @Override
+             public void onSuccess(Integer result) {
+                 view.setText(String.valueOf(result));
+             }
+
+             @Override
+             public void onError(Throwable e) {
+                 view.hideProgress();
+             }
+
+             @Override
+             public void onComplete() {
+                view.hideProgress();
+             }
+         });
     }
 
     @Override
     public void start() {
-        onCompute();
-    }
-
-    @Override
-    public void onSuccess(int sum) {
-        view.setText("3+4=" + sum);
-    }
-
-    @Override
-    public void onError(String error) {
 
     }
 }

@@ -1,7 +1,7 @@
 package net.fengg.dagger2mvpsample.di.modules;
 
-import net.fengg.dagger2mvpsample.data.ISecondExecutor;
-import net.fengg.dagger2mvpsample.data.SecondExecutorImpl;
+import net.fengg.dagger2mvpsample.ui.interactor.ISecondInteractor;
+import net.fengg.dagger2mvpsample.ui.interactor.SecondInteractorImpl;
 import net.fengg.dagger2mvpsample.api.GitHubApi;
 import net.fengg.dagger2mvpsample.ui.contract.ISecondContract;
 import net.fengg.dagger2mvpsample.ui.presenter.SecondPresenterImpl;
@@ -26,13 +26,13 @@ public class SecondModule {
     }
 
     @Provides
-    public ISecondExecutor provideGetContributorsIterator(GitHubApi service) {
-        return new SecondExecutorImpl(service);
+    public ISecondInteractor provideGetContributorsIterator(GitHubApi service) {
+        return new SecondInteractorImpl(service);
     }
 
     @Provides
-    public ISecondContract.Presenter providePresenter(ISecondContract.View view, ISecondExecutor executor) {
-        return new SecondPresenterImpl(view, executor);
+    public ISecondContract.Presenter providePresenter(ISecondContract.View view, ISecondInteractor interactor) {
+        return new SecondPresenterImpl(view, interactor);
     }
 
 //    @Provides

@@ -1,5 +1,8 @@
 package net.fengg.dagger2mvpsample.di.modules;
 
+import com.ihsanbal.logging.Level;
+import com.ihsanbal.logging.LoggingInterceptor;
+
 import net.fengg.dagger2mvpsample.di.scope.ActivityScope;
 import net.fengg.dagger2mvpsample.BuildConfig;
 import net.fengg.dagger2mvpsample.api.GitHubApi;
@@ -11,6 +14,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
+import okhttp3.internal.platform.Platform;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -26,9 +30,17 @@ public class GitHubModule {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
-            builder.addInterceptor(logging);
+//            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+//            builder.addInterceptor(logging);
+            builder.addInterceptor(new LoggingInterceptor.Builder()
+                    .loggable(BuildConfig.DEBUG)
+                    .setLevel(Level.BASIC)
+                    .log(Platform.INFO)
+                    .request("Request")
+                    .response("Response")
+                    .addHeader("version", BuildConfig.VERSION_NAME)
+                    .build());
         }
 
         builder.connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)

@@ -1,10 +1,9 @@
 package net.fengg.dagger2mvpsample.di.component;
 
-import net.fengg.dagger2mvpsample.App;
+import net.fengg.dagger2mvpsample.app.App;
 import net.fengg.dagger2mvpsample.api.GitHubApi;
 import net.fengg.dagger2mvpsample.di.modules.AppModule;
 import net.fengg.dagger2mvpsample.di.modules.GitHubModule;
-import net.fengg.dagger2mvpsample.di.scope.ActivityScope;
 
 import javax.inject.Singleton;
 

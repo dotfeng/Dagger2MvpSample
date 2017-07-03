@@ -1,7 +1,7 @@
 package net.fengg.dagger2mvpsample.di.modules;
 
-import net.fengg.dagger2mvpsample.data.IMainExecutor;
-import net.fengg.dagger2mvpsample.data.MainExecutorImpl;
+import net.fengg.dagger2mvpsample.ui.interactor.IMainInteractor;
+import net.fengg.dagger2mvpsample.ui.interactor.MainInteractorImpl;
 import net.fengg.dagger2mvpsample.ui.contract.IMainContract;
 import net.fengg.dagger2mvpsample.ui.presenter.MainPresenterImpl;
 
@@ -26,13 +26,13 @@ public class MainModule {
     }
 
     @Provides
-    public IMainExecutor provideIterator() {
-        return new MainExecutorImpl();
+    public IMainInteractor provideIterator() {
+        return new MainInteractorImpl();
     }
 
     @Provides
-    public IMainContract.Presenter providePresenter(IMainContract.View view, IMainExecutor executor) {
-        Timber.d(executor.toString());/**not Singleton, without {@link javax.inject.Scope}{@SeeAlso}{@link net.fengg.dagger2mvpsample.ui.view.activity.MainActivity}*/
-        return new MainPresenterImpl(view, executor);
+    public IMainContract.Presenter providePresenter(IMainContract.View view, IMainInteractor interactor) {
+        Timber.d(interactor.toString());/**not Singleton, without {@link javax.inject.Scope}{@SeeAlso}{@link net.fengg.dagger2mvpsample.ui.view.activity.MainActivity}*/
+        return new MainPresenterImpl(view, interactor);
     }
 }

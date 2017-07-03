@@ -1,9 +1,8 @@
 package net.fengg.dagger2mvpsample.di.modules;
 
 import android.app.Application;
-import android.content.Context;
 
-import net.fengg.dagger2mvpsample.App;
+import net.fengg.dagger2mvpsample.app.App;
 
 import javax.inject.Singleton;
 

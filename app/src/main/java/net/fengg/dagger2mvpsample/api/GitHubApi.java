@@ -1,8 +1,7 @@
 package net.fengg.dagger2mvpsample.api;
 
-import net.fengg.dagger2mvpsample.models.Contributor;
-import net.fengg.dagger2mvpsample.models.Repository;
-import net.fengg.dagger2mvpsample.models.User;
+import net.fengg.dagger2mvpsample.model.Contributor;
+import net.fengg.dagger2mvpsample.model.User;
 
 import java.util.List;
 

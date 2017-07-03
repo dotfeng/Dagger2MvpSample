@@ -1,9 +1,9 @@
 package net.fengg.dagger2mvpsample.ui.presenter;
 
-import net.fengg.dagger2mvpsample.data.ISecondExecutor;
-import net.fengg.dagger2mvpsample.models.Contributor;
+import net.fengg.dagger2mvpsample.ui.interactor.ISecondInteractor;
+import net.fengg.dagger2mvpsample.model.Contributor;
 import net.fengg.dagger2mvpsample.ui.contract.ISecondContract;
-import net.fengg.dagger2mvpsample.ui.listener.OnFinishListenerSecond;
+import net.fengg.dagger2mvpsample.ui.listener.OnFinishListener;
 
 import java.util.List;
 
@@ -11,36 +11,44 @@ import java.util.List;
  * Created by feng on 2017/6/9.
  */
 
-public class SecondPresenterImpl implements ISecondContract.Presenter, OnFinishListenerSecond {
+public class SecondPresenterImpl implements ISecondContract.Presenter {
 
     private ISecondContract.View view;
-    private ISecondExecutor iterator;
+    private ISecondInteractor interactor;
 
-    public SecondPresenterImpl(ISecondContract.View view, ISecondExecutor iterator) {
+    public SecondPresenterImpl(ISecondContract.View view, ISecondInteractor interactor) {
         this.view = view;
-        this.iterator = iterator;
+        this.interactor = interactor;
     }
 
     @Override
     public void onGet() {
-        view.showBaseDialog();
-        iterator.getContributors("square", "retrofit", this);
+        interactor.getContributors("square", "retrofit", new OnFinishListener<List<Contributor>>() {
+            @Override
+            public void onStart() {
+                view.showProgress();
+            }
+
+            @Override
+            public void onSuccess(List<Contributor> result) {
+                view.updateList(result);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                view.hideProgress();
+            }
+        });
     }
 
     @Override
     public void start() {
         onGet();
-    }
-
-    @Override
-    public void onSuccess(List<Contributor> contributors) {
-        view.cancelBaseDialog();
-        view.updateList(contributors);
-    }
-
-    @Override
-    public void onError(String error) {
-
     }
 }
 

@@ -1,8 +1,8 @@
 package net.fengg.dagger2mvpsample.di.modules;
 
+import net.fengg.dagger2mvpsample.ui.interactor.IThirdInteractor;
+import net.fengg.dagger2mvpsample.ui.interactor.ThirdInteractorImpl;
 import net.fengg.dagger2mvpsample.api.GitHubApi;
-import net.fengg.dagger2mvpsample.data.IThirdExecutor;
-import net.fengg.dagger2mvpsample.data.ThirdExecutorImpl;
 import net.fengg.dagger2mvpsample.ui.contract.IThirdContract;
 import net.fengg.dagger2mvpsample.ui.presenter.ThirdPresenterImpl;
 
@@ -26,12 +26,12 @@ public class ThirdModule {
     }
 
     @Provides
-    public IThirdExecutor provideIterator(GitHubApi service) {
-        return new ThirdExecutorImpl(service);
+    public IThirdInteractor provideIterator(GitHubApi service) {
+        return new ThirdInteractorImpl(service);
     }
 
     @Provides
-    public IThirdContract.Presenter providePresenter(IThirdContract.View view, IThirdExecutor executor) {
-        return new ThirdPresenterImpl(view, executor);
+    public IThirdContract.Presenter providePresenter(IThirdContract.View view, IThirdInteractor interactor) {
+        return new ThirdPresenterImpl(view, interactor);
     }
 }

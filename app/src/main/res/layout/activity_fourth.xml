@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abl_fourth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/ctl_fourth"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <FrameLayout
+                android:id="@+id/fl_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="parallax">
+
+                <com.flaviofaria.kenburnsview.KenBurnsView
+                    android:id="@+id/ctm_kbv_iamge"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/bg_monkey_king"
+                    android:contentDescription="@null"/>
+            </FrameLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tb_fourth"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="top"
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:gravity="center_vertical"/>
+            </android.support.v7.widget.Toolbar>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tl_fourth"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_height"
+                android:layout_gravity="bottom"
+                app:tabGravity="center"
+                app:tabMode="fixed"/>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_fourth"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+</android.support.design.widget.CoordinatorLayout>

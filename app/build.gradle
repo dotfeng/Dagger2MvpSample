@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+//apply plugin: 'com.antfortune.freeline'
 //apply plugin: 'com.jakewharton.hugo'
+//apply plugin: 'com.frogermcs.androiddevmetrics'
 
 android {
     compileSdkVersion 25
@@ -7,14 +10,15 @@ android {
 
     defaultConfig {
         applicationId "net.fengg.dagger2mvpsample"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ moduleName : project.getName() ]
+                arguments = [moduleName: project.getName()]
             }
         }
     }
@@ -24,46 +28,104 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    configurations.all {
+        //Conflict with dependency, Resolved versions for app (23.1.0) and test app (23.0.1) differ.
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+        resolutionStrategy.force 'com.android.support:support-annotations:23.1.1'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    //-----for test
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test:runner:0.5') {}
+    // Set this dependency to use JUnit 4 rules
+    androidTestCompile('com.android.support.test:rules:0.5') {}
+    // Set this dependency to build and run UI Automator tests
+    androidTestCompile('com.android.support.test.uiautomator:uiautomator-v18:2.1.2') {}
+    //mock tests
+    androidTestCompile('org.mockito:mockito-core:1.9.5') {}
+    androidTestCompile('org.hamcrest:hamcrest-library:1.3') {}
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') {}
+    //-----for test
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.google.guava:guava:22.0-android'
     //findviewbyid
     compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     //依赖注入
     compile 'com.google.dagger:dagger:2.7'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
     //webservice
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    //okhttp log
+    compile('com.github.ihsanbal:LoggingInterceptor:2.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
     //rxjava2
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
     //log
     compile 'com.jakewharton.timber:timber:4.5.1'
     //parcelable
     compile 'org.parceler:parceler-api:1.1.8'
-    annotationProcessor 'org.parceler:parceler:1.1.8'
     //路由，页面跳转
     compile 'com.alibaba:arouter-api:1.2.1.1'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.1.2.1'
     //greendao,sqlcipher, wcdb
-
-
+    compile 'org.greenrobot:greendao:3.2.2'
+    // This is only needed if you want to use encrypted databases
+    compile 'net.zetetic:android-database-sqlcipher:3.5.6'
     //显示图片
     compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
+    //savedinstance
+    compile 'com.evernote:android-state:1.1.1'
+//    compile 'frankiesardo:icepick:3.2.0'
+//    annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
+    //progress dialog
+    compile 'com.kaopiz:kprogresshud:1.1.0'
+    //crash catch
+//    compile 'ch.acra:acra:4.9.2'
+    //recyclerview adapter
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
+    //滑动菜单
+    compile 'com.github.anzaizai:EasySwipeMenuLayout:1.0.6'
+    //状态栏颜色
+    compile 'com.jaeger.statusbarutil:library:1.4.0'
+    //滑动返回
+    compile 'cn.bingoogolapple:bga-swipebacklayout:1.0.8@aar'
+    compile 'com.r0adkll:slidableactivity:2.0.5'
+    compile 'com.flaviofaria:kenburnsview:1.0.7'
+    //    classpath 'com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:0.5'
+// MVP + ViewState + LCE Views
+//    compile 'com.hannesdorfmann.mosby3:mvp-lce:3.0.4'
+//    compile 'com.lzy.net:okgo:3.0.1'
+//    compile 'com.lzy.net:okrx2:2.0.1'
 
-    compile 'frankiesardo:icepick:3.2.0'
-    annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
+    annotationProcessor 'org.parceler:parceler:1.1.8'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.1.2.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
+    annotationProcessor 'com.evernote:android-state-processor:1.1.1'
 }

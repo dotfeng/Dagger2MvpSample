@@ -1,0 +1,9 @@
+<resources>
+
+	<!-- Base application theme. -->
+	<style name="AppTheme.Transparent.Fourth">
+		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+		<item name="android:statusBarColor">@color/colorFourthTrans</item>
+	</style>
+
+</resources>

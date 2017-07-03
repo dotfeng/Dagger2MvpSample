@@ -1,8 +1,6 @@
 package net.fengg.dagger2mvpsample.ui.contract;
 
-import net.fengg.dagger2mvpsample.models.Contributor;
-import net.fengg.dagger2mvpsample.ui.presenter.IBasePresenter;
-import net.fengg.dagger2mvpsample.ui.view.IBaseView;
+import net.fengg.dagger2mvpsample.model.Contributor;
 
 import java.util.List;
 
