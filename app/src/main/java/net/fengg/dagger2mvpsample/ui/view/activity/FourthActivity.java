@@ -82,7 +82,6 @@ public class FourthActivity extends BaseSwipeActivity implements IFourContract.V
                         getStatusBarHeightPixel(this);
         ctl_fourth.requestLayout();
 
-        // TODO : Hack for CollapsingToolbarLayout
         tv_title.setText("Demo");
         actionBarResponsive();
         abl_fourth.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
