@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import timber.log.Timber;
 
 @Route(path = Path.SECOND_ACTIVITY)
 public class SecondActivity extends BaseSwipeActivity implements ISecondContract.View {
@@ -102,15 +104,19 @@ public class SecondActivity extends BaseSwipeActivity implements ISecondContract
         abl_second.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                if (verticalOffset == 0) {
-//                    tv_title.setAlpha(0.0f);
-//                }else {
-//                    tv_title.setAlpha(Math.abs(verticalOffset / (float) appBarLayout.getTotalScrollRange()));
+                //TODO has a bug
+//                if (ctl_second.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(ctl_second)) {
+//                    setRefreshEnabled(false);
+//                } else {
+//                    setRefreshEnabled(true);
 //                }
-                if (verticalOffset >= 0) {
-                    srl_contributor.setEnabled(true);
+                if (verticalOffset == 0) {
+                    setRefreshEnabled(true);
+                } else if(verticalOffset > 0){
+                    Timber.i(String.valueOf(verticalOffset));
+                    setRefreshEnabled(true);
                 } else {
-                    srl_contributor.setEnabled(false);
+                    setRefreshEnabled(false);
                 }
 
                 if (verticalOffset == 0) {
@@ -136,7 +142,8 @@ public class SecondActivity extends BaseSwipeActivity implements ISecondContract
         srl_contributor.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.onGet();
+                srl_contributor.setRefreshing(false);
+                presenter.onUpdate();
             }
         });
     }
@@ -158,15 +165,41 @@ public class SecondActivity extends BaseSwipeActivity implements ISecondContract
     @Override
     public void updateList(final List<Contributor> contributors) {
         contributorAdapter.setNewData(contributors);
+    }
+
+    @Override
+    public void setLoading() {
+        contributorAdapter.setEmptyView(R.layout.layout_loading, (ViewGroup) rv_contributors.getParent());
+    }
+
+    @Override
+    public void setError() {
+        contributorAdapter.setEmptyView(R.layout.layout_error, (ViewGroup) rv_contributors.getParent());
+    }
+
+    @Override
+    public void setEmpty() {
+        contributorAdapter.setEmptyView(R.layout.layout_empty, (ViewGroup) rv_contributors.getParent());
+    }
+
+    @Override
+    public void setRefreshing() {
+        srl_contributor.setRefreshing(true);
+    }
+
+    @Override
+    public void setRefreshed() {
         srl_contributor.setRefreshing(false);
+    }
+
+    @Override
+    public void setRefreshEnabled(boolean enabled) {
+        srl_contributor.setEnabled(enabled);
     }
 
     public void openThird(Contributor contributor) {
         ARouter.getInstance().build(Path.THIRD_ACTIVITY)
                 .withParcelable("con", Parcels.wrap(contributor))
                 .navigation();
-//        Intent intent = new Intent(this, ThirdActivity.class);
-//        intent.putExtra("con", Parcels.wrap(contributor));
-//        mSwipeBackHelper.forward(intent);
     }
 }

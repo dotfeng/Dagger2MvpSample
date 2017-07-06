@@ -7,6 +7,8 @@ import net.fengg.dagger2mvpsample.ui.listener.OnFinishListener;
 
 import java.util.List;
 
+import retrofit2.HttpException;
+
 /**
  * Created by feng on 2017/6/9.
  */
@@ -26,22 +28,70 @@ public class SecondPresenterImpl implements ISecondContract.Presenter {
         interactor.getContributors("square", "retrofit", new OnFinishListener<List<Contributor>>() {
             @Override
             public void onStart() {
-                view.showProgress();
+                view.setRefreshEnabled(false);
+                view.setLoading();
             }
 
             @Override
             public void onSuccess(List<Contributor> result) {
                 view.updateList(result);
+                if(null == result || result.isEmpty()) {
+                    view.setEmpty();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
-
+                view.setRefreshEnabled(true);
+                if(e instanceof HttpException) {
+                    if(404 == ((HttpException) e).code()) {
+                        view.setEmpty();
+                        return;
+                    }
+                }
+                view.setError();
             }
 
             @Override
             public void onComplete() {
-                view.hideProgress();
+                view.setRefreshEnabled(true);
+            }
+        });
+    }
+
+    @Override
+    public void onUpdate() {
+        interactor.getContributors("square", "retrofit", new OnFinishListener<List<Contributor>>() {
+            @Override
+            public void onStart() {
+                view.setRefreshEnabled(false);
+                view.updateList(null);
+                view.setLoading();
+            }
+
+            @Override
+            public void onSuccess(List<Contributor> result) {
+                view.updateList(result);
+                if(null == result || result.isEmpty()) {
+                    view.setEmpty();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                view.setRefreshEnabled(true);
+                if(e instanceof HttpException) {
+                    if(404 == ((HttpException) e).code()) {
+                        view.setEmpty();
+                        return;
+                    }
+                }
+                view.setError();
+            }
+
+            @Override
+            public void onComplete() {
+                view.setRefreshEnabled(true);
             }
         });
     }

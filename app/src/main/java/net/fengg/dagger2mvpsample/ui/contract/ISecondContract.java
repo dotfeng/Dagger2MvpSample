@@ -10,11 +10,18 @@ import java.util.List;
 
 public interface ISecondContract {
     interface View extends IBaseView {
-        public void updateList(List<Contributor> contributors);
+        void updateList(List<Contributor> contributors);
+        void setLoading();
+        void setError();
+        void setEmpty();
+        void setRefreshing();
+        void setRefreshed();
+        void setRefreshEnabled(boolean enabled);
     }
 
     interface Presenter extends IBasePresenter {
-        public void onGet();
+        void onGet();
+        void onUpdate();
     }
 
 }
